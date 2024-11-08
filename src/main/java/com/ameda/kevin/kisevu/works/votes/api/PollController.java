@@ -6,7 +6,9 @@ package com.ameda.kevin.kisevu.works.votes.api;
 *
 */
 
+import com.ameda.kevin.kisevu.works.votes.entity.Vote;
 import com.ameda.kevin.kisevu.works.votes.exceptions.PollCouldNotBeFound;
+import com.ameda.kevin.kisevu.works.votes.exceptions.PollNotFound;
 import com.ameda.kevin.kisevu.works.votes.service.PollService;
 import com.ameda.kevin.kisevu.works.votes.entity.Poll;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,14 @@ public class PollController {
         }catch (PollCouldNotBeFound ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
         }
-
+    }
+    @PostMapping("/vote")
+    public ResponseEntity<?> vote(@RequestBody Vote vote) throws PollNotFound {
+        try{
+            pollService.vote(vote.getPollId(),vote.getOptionIndex());
+            return new ResponseEntity<>("vote was initiated successfully",HttpStatus.OK);
+        }catch (PollNotFound pollNotFound){
+            return new ResponseEntity<>("vote was not a success.",HttpStatus.EXPECTATION_FAILED);
+        }
     }
 }
