@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './poll.component.css'
 })
 export class PollComponent implements OnInit{
+
   newPoll: Poll = {
    id: 0,
    question: '',
@@ -65,5 +66,25 @@ export class PollComponent implements OnInit{
       ]
      };
   }
+
+  vote(pollId: number, optionIndex: number): void {
+    console.log('Vote clicked for poll ID:', pollId, 'Option Index:', optionIndex);
+    this.pollService.vote(pollId, optionIndex).subscribe({
+      next: () => {
+        const poll = this.polls.find(p => p.id === pollId);
+        if (poll) {
+          poll.options[optionIndex].voteCount++;
+        }
+      },
+      error: (error) => {
+        console.error('Error casting a vote', error);
+      }
+    });
+  }
+
+  addOption(){
+    this.newPoll.options.push({optionText: '',voteCount:0});
+  }
+
 
 }

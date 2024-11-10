@@ -13,9 +13,9 @@ export class PollService {
 
 
   createPoll(poll:Poll):Observable<Poll>{
-    return this.http.post<Poll>(this.baseUrl+'/poll/create',poll);
+    const url = `${this.baseUrl}/poll/create`;
+    return this.http.post<Poll>(url,poll);
   }
-
 
 
   getPolls():Observable<Poll[]>{
@@ -23,8 +23,8 @@ export class PollService {
   }
 
   vote(pollId : number, optionIndex : number):Observable<void>{
-    const url = `${this.baseUrl}/vote}`;
-    return this.http.post<void>(url,{ pollId, optionIndex });
+    // const url = `${this.baseUrl}/vote`;
+    return this.http.post<void>(this.baseUrl+"/vote",{ pollId, optionIndex });
   }
 
 }
